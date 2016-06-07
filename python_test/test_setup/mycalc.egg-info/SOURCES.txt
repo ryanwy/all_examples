@@ -1,0 +1,7 @@
+mycalc.py
+setup.py
+mycalc.egg-info/PKG-INFO
+mycalc.egg-info/SOURCES.txt
+mycalc.egg-info/dependency_links.txt
+mycalc.egg-info/entry_points.txt
+mycalc.egg-info/top_level.txt

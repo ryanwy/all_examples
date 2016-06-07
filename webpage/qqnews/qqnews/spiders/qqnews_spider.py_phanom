@@ -1,0 +1,72 @@
+import scrapy
+import re
+import os
+
+from qqnews.items import qqnewsItem
+from scrapy.http import Request
+from scrapy.http.request.form import FormRequest
+from selenium import webdriver
+#from browsermobproxy import Server
+
+def f1():
+    names = []
+    import inspect
+    frame = inspect.currentframe()
+    ## Keep moving to next outer frame
+    while True:
+        try:
+            frame = frame.f_back
+            name = frame.f_code.co_name
+            names.append(name)
+        except:
+            break
+    return names
+
+def enc(line):
+    for l in line:
+        print l.encode('utf-8')
+
+class qqnewsSpider(scrapy.Spider):
+    name = 'qqnews'
+    allowed_domains = ['news.qq.com',
+            'coral.qq.com',
+        ]
+    start_urls = [
+        'http://news.qq.com/a/20160427/003825.htm',
+    ]
+
+    def parse_ajax(self, response):
+        print "HERE **************"
+        print response.body
+        match = re.search(r"\"commentnum\":\"(\w+)\"\}", response.body)
+        self.items['comment_num'] = match.group(1)
+        print self.items['comment_num']
+        yield self.items
+
+    # 'http://news.qq.com/a/20160531/006521.htm'
+    def parse(self, response):
+        import traceback
+        traceback.print_stack()
+        
+        #server  = Server('/home/hadoop/browsermob-proxy/browsermob-dist/src/main/scripts/browsermob-proxy')
+        #server.start()
+        #proxy = server.create_proxy()
+        #service_args = ["--proxy-server=%s" % proxy.proxy]
+        #driver = webdriver.PhantomJS(executable_path='/home/hadoop/phantomjs-2.1.1-linux-x86_64/bin/phantomjs')
+        #driver.set_proxy(proxy.selenium_proxy())
+        driver = webdriver.Remote('http://127.0.0.1:4446/wd/hub', desired_capabilities=webdriver.DesiredCapabilities.phantomjs())
+        driver.get(response.url)
+        
+        item = qqnewsItem()
+        item['comment_num'] = self.driver.find_elements_by_xpath("//div[@class='tit-bar clearfix']/span[@class='r all-number-comment']/a[@id='cmtNum':]") 
+        self.items = item
+        #extra_links = ['http://coral.qq.com/article/1383089650/commentnum?callback=_cbSum&source=1&t=0.9233111530535709']
+        #for url in extra_links:
+        #    yield Request(url, callback = self.parse_ajax )
+        
+        item['title'] = response.xpath("//div[@class='hd']/h1/text()").extract()
+        item['content'] = response.xpath("//div[@id='Cnt-Main-Article-QQ']/p/text()").extract()
+        item['msg_src'] = response.xpath("//span[@class='color-a-1']/a[@target='_blank']/text()").extract()
+        item['msg_src_link'] = response.xpath("//span[@class='color-a-1']/a[@target='_blank']/@href").extract()
+        item['comment_num'] = response.xpath("//div[@class='tit-bar clearfix']/span[@class='r all-number-comment']/a[@id='cmtNum']/text()").extract()
+        yield item

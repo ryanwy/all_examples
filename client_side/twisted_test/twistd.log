@@ -1,0 +1,56 @@
+2016-04-06 05:46:14-0400 [-] Log opened.
+2016-04-06 05:46:14-0400 [-] twistd 15.5.0 (/usr/local/bin/python 2.7.10) starting up.
+2016-04-06 05:46:14-0400 [-] reactor class: twisted.internet.epollreactor.EPollReactor.
+2016-04-06 05:46:14-0400 [-] Starting factory <__builtin__.ClientChatFactory instance at 0x7f6f013e2830>
+2016-04-06 05:46:14-0400 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/log.py", line 101, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/log.py", line 84, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/context.py", line 118, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/context.py", line 81, in callWithContext
+	    return func(*args,**kw)
+	--- <exception caught here> ---
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/posixbase.py", line 602, in _doReadOrWrite
+	    why = selectable.doWrite()
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/abstract.py", line 270, in doWrite
+	    self.stopWriting()
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/abstract.py", line 429, in stopWriting
+	    self.reactor.removeWriter(self)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/epollreactor.py", line 344, in removeWriter
+	    EPOLLOUT, EPOLLIN)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/epollreactor.py", line 321, in _remove
+	    self._poller.unregister(fd)
+	exceptions.IOError: [Errno 1] Operation not permitted
+	
+2016-04-06 05:46:14-0400 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/application/app.py", line 285, in runReactorWithLogging
+	    reactor.run()
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/base.py", line 1194, in run
+	    self.mainLoop()
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/base.py", line 1206, in mainLoop
+	    self.doIteration(t)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/epollreactor.py", line 396, in doPoll
+	    log.callWithLogger(selectable, _drdw, selectable, fd, event)
+	--- <exception caught here> ---
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/log.py", line 101, in callWithLogger
+	    return callWithContext({"system": lp}, func, *args, **kw)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/log.py", line 84, in callWithContext
+	    return context.call({ILogContext: newCtx}, func, *args, **kw)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/context.py", line 118, in callWithContext
+	    return self.currentContext().callWithContext(ctx, func, *args, **kw)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/python/context.py", line 81, in callWithContext
+	    return func(*args,**kw)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/posixbase.py", line 610, in _doReadOrWrite
+	    self._disconnectSelectable(selectable, why, inRead)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/posixbase.py", line 257, in _disconnectSelectable
+	    self.removeWriter(selectable)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/epollreactor.py", line 344, in removeWriter
+	    EPOLLOUT, EPOLLIN)
+	  File "/usr/local/lib/python2.7/site-packages/Twisted-15.5.0-py2.7-linux-x86_64.egg/twisted/internet/epollreactor.py", line 319, in _remove
+	    del selectables[fd]
+	exceptions.KeyError: 1
+	

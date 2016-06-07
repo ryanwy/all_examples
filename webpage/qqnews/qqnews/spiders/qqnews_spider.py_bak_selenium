@@ -1,0 +1,58 @@
+import scrapy
+from qqnews.items import qqnewsItem
+from scrapy.http import Request
+from selenium import webdriver
+
+def f1():
+    names = []
+    import inspect
+    frame = inspect.currentframe()
+    ## Keep moving to next outer frame
+    while True:
+        try:
+            frame = frame.f_back
+            name = frame.f_code.co_name
+            names.append(name)
+        except:
+            break
+    return names
+
+def enc(line):
+    for l in line:
+        print l.encode('utf-8')
+
+class qqnewsSpider(scrapy.Spider):
+    name = 'qqnews'
+    allowed_domains = ['news.qq.com']
+    start_urls = [
+        'http://news.qq.com/a/20160427/003825.htm',
+    ]
+
+    def __init__(self):
+        self.driver = webdriver.Firefox()
+
+    # 'http://news.qq.com/a/20160531/006521.htm'
+    def parse(self, response):
+        import traceback
+        traceback.print_stack()
+        #print f1()
+        #extra_links = response.xpath("//div[@class='bd']/div[@id='kbContA']/div[@class='list clearfix']/ul/li/a[@target='_blank']/@href").extract()
+        extra_links = ['http://news.qq.com/a/20160602/000303.htm',
+                'http://news.qq.com/a/20160601/044744.htm'
+            ]
+        for url in extra_links:
+            yield Request(url)
+        item = qqnewsItem()
+        item['title'] = response.xpath("//div[@class='hd']/h1/text()").extract()
+        item['content'] = response.xpath("//div[@id='Cnt-Main-Article-QQ']/p/text()").extract()
+        item['msg_src'] = response.xpath("//span[@class='color-a-1']/a[@target='_blank']/text()").extract()
+        item['msg_src_link'] = response.xpath("//span[@class='color-a-1']/a[@target='_blank']/@href").extract()
+        #item['comment_num'] = response.xpath("//div[@class='tit-bar clearfix']/span[@class='r all-number-comment']/a[@id='cmtNum']/text()").extract()
+        self.driver.get(response.url)
+        item['comment_num'] = self.driver.find_elements_by_xpath("//div[@class='tit-bar clearfix']/span[@class='r all-number-comment']/a[@id='cmtNum':]")
+        #print enc(item['title'])
+        #print enc(item['content'])
+        #print enc(item['msg_src'])
+        #print enc(item['msg_src_link'])
+        yield item
+        self.driver.close()

@@ -1,0 +1,8 @@
+package mytest;
+
+message news {
+    required string header = 1;
+    required int32 news_id = 2;
+    required string body = 3;
+    optional string link = 4;
+}
